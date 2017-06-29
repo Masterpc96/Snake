@@ -43,8 +43,9 @@ public class Ground extends JPanel implements KeyListener {
             } else {
                 g2d.drawRect(p.x, p.y, PIXEL, PIXEL);
             }
-
         }
+
+        g2d.fillRect(snake.getApplePoint().x,snake.getApplePoint().y,PIXEL+1,PIXEL+1);
 
 
     }
@@ -69,25 +70,25 @@ public class Ground extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        Point lastPoint = snake.getLastPoint();
+        Point firstPoint = snake.getFirstPoint();
 
         if (keyCode == KEY_LEFT && previousKey != 'R') {
             previousKey = 'L';
-            snake.move(lastPoint.x - PIXEL, lastPoint.y);
+            snake.move(firstPoint.x - PIXEL, firstPoint.y);
             System.out.println("LEFT");
         } else if (keyCode == KEY_UP && previousKey != 'D') {
             previousKey = 'U';
-            snake.move(lastPoint.x, lastPoint.y - PIXEL);
+            snake.move(firstPoint.x, firstPoint.y - PIXEL);
 
             System.out.println("UP");
         } else if (keyCode == KEY_RIGHT && previousKey != 'L') {
             previousKey = 'R';
-            snake.move(lastPoint.x + PIXEL, lastPoint.y);
+            snake.move(firstPoint.x + PIXEL, firstPoint.y);
 
             System.out.println("RIGHT");
         } else if (keyCode == KEY_DOWN && previousKey != 'U') {
             previousKey = 'D';
-            snake.move(lastPoint.x, lastPoint.y + PIXEL);
+            snake.move(firstPoint.x, firstPoint.y + PIXEL);
 
             System.out.println("DOWN");
         }
