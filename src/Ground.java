@@ -14,13 +14,16 @@ public class Ground extends JPanel implements KeyListener {
     private final int KEY_DOWN = 40;
     private int WIDTH = 900;
     private int HEIGHT = 640;
+    private int PIXEL = 10;
+    private char previousKey = 'L';
     private Snake snake;
 
     public Ground() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(new Color(109, 183, 104));
-        new Snake(WIDTH, HEIGHT);
+        snake = new Snake(WIDTH, HEIGHT);
         addKeyListener(this);
+        setFocusable(true);
     }
 
     @Override
@@ -28,6 +31,12 @@ public class Ground extends JPanel implements KeyListener {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         drawBorder(g2d);
+        g2d.setStroke(new BasicStroke(1));
+
+
+        for(Point p:snake.getPoint()){
+            g2d.drawRect(p.x,p.y,PIXEL,PIXEL);
+        }
 
 
     }
@@ -47,47 +56,38 @@ public class Ground extends JPanel implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         Point lastPoint = snake.getLastPoint();
-        char previousKey = 'L';
-        switch (keyCode) {
-            case KEY_LEFT:
-                if (previousKey != 'R') {
-                    previousKey = 'L';
-                    snake.move(lastPoint.x-1,lastPoint.y);
-                }
 
-            case KEY_UP:
-                if (previousKey != 'D') {
-                    previousKey = 'U';
-                    snake.move(lastPoint.x,lastPoint.y-1);
+        if (keyCode == KEY_LEFT && previousKey != 'R') {
+            previousKey = 'L';
+            snake.move(lastPoint.x - PIXEL, lastPoint.y);
+            System.out.println("LEFT");
+        } else if (keyCode == KEY_UP && previousKey != 'D') {
+            previousKey = 'U';
+            snake.move(lastPoint.x, lastPoint.y - PIXEL);
 
-                }
+            System.out.println("UP");
+        } else if (keyCode == KEY_RIGHT && previousKey != 'L') {
+            previousKey = 'R';
+            snake.move(lastPoint.x + PIXEL, lastPoint.y);
 
-            case KEY_RIGHT:
-                if (previousKey != 'L') {
-                    previousKey = 'R';
-                    snake.move(lastPoint.x+1,lastPoint.y);
+            System.out.println("RIGHT");
+        } else if (keyCode == KEY_DOWN && previousKey != 'U') {
+            previousKey = 'D';
+            snake.move(lastPoint.x, lastPoint.y + PIXEL);
 
-                }
-
-            case KEY_DOWN:
-                if (previousKey != 'U') {
-                    previousKey = 'D';
-                    snake.move(lastPoint.x,lastPoint.y+1);
-
-                }
-
+            System.out.println("DOWN");
         }
+        repaint();
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
     }
 }

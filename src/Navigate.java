@@ -33,12 +33,13 @@ public class Navigate extends JPanel{
                 System.exit(0);
             }
         });
+        close.setSelected(false);
 
         add(name);
         add(score);
         add(highScore);
         add(life);
-
         add(close);
+
     }
 }

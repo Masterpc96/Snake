@@ -2,11 +2,13 @@ import oracle.jrockit.jfr.JFR;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Created by Michał on 29.06.2017.
  */
-public class Frame extends JFrame {
+public class Frame extends JFrame{
 
     public Frame(){
         super("Snake v1.0");
@@ -18,9 +20,10 @@ public class Frame extends JFrame {
 
         setResizable(false);
 
-        add(new Ground(),BorderLayout.WEST);
         add(new Navigate(name),BorderLayout.EAST);
+        add(new Ground(),BorderLayout.WEST);
         setVisible(true);
         pack();
     }
+
 }
