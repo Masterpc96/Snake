@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,11 +12,15 @@ public class Snake {
     private Point applePoint;
     private int x;
     private int y;
+    private final int STROKE;
+    private final int PIXEL;
     private int life;
 
-    public Snake(int x, int y) {
+    public Snake(int x, int y, int stroke, int pixel) {
         this.x = x;
         this.y = y;
+        this.STROKE = stroke;
+        this.PIXEL = pixel;
         points = new ArrayList<>();
         rand = new Random();
 
@@ -26,14 +29,14 @@ public class Snake {
 
     public void initGame(int x, int y) {
         points.add(new Point(x / 2, y / 2));
-        points.add(new Point(x / 2 + 10, y / 2));
-        points.add(new Point(x / 2 + 20, y / 2));
-        points.add(new Point(x / 2 + 30, y / 2));
-        points.add(new Point(x / 2 + 40, y / 2));
-        points.add(new Point(x / 2 + 50, y / 2));
+        points.add(new Point(x / 2 + PIXEL, y / 2));
+        points.add(new Point(x / 2 + 2* PIXEL, y / 2));
+        points.add(new Point(x / 2 + 3* PIXEL, y / 2));
+        points.add(new Point(x / 2 + 4* PIXEL, y / 2));
+        points.add(new Point(x / 2 + 5* PIXEL, y / 2));
 
         length = 6;
-        life=3;
+        life = 3;
 
         apple();
     }
@@ -43,12 +46,12 @@ public class Snake {
         int y;
         do {
             do {
-                x = rand.nextInt(this.x - 30) + 10;
-            } while (x % 10 != 0);
+                x = rand.nextInt(this.x - (1+ PIXEL +2* STROKE)) + PIXEL;
+            } while (x % PIXEL != 0);
 
             do {
-                y = rand.nextInt(this.y - 30) + 10;
-            } while (y % 10 != 0);
+                y = rand.nextInt(this.y - (1+ PIXEL +2* STROKE)) + PIXEL;
+            } while (y % PIXEL != 0);
 
             applePoint = new Point(x, y);
         } while (points.contains(applePoint));
@@ -58,15 +61,13 @@ public class Snake {
         if (!checkCollision(x, y)) {
             points.remove(length - 1);
             points.add(0, new Point(x, y));
-            if (applePoint.x == x && applePoint.y == y){
+            if (applePoint.x == x && applePoint.y == y) {
                 apple();
                 points.add(applePoint);
                 length++;
-                Navigate.score.setText("Your score " + String.valueOf(length-6));
+                Navigate.score.setText("Your score " + String.valueOf(length - 6));
             }
         } else {
-//            int option=JOptionPane.showConfirmDialog(null,"Game Over your score is " + String.valueOf(length-6),"Game Over", JOptionPane.OK_OPTION);
-//            if(option== JOptionPane.OK_OPTION) System.exit(0);
             life--;
             return true;
         }
@@ -74,12 +75,11 @@ public class Snake {
     }
 
     public boolean checkCollision(int _x, int _y) {
-        if (_x <= 0 || _y <= 0 || _x >= x - 14 || _y >= y - 14 || points.contains(new Point(_x, _y))) {
+        if (_x <=  0|| _y <= 0 || _x >= x - (PIXEL + STROKE) || _y >= y - (PIXEL + STROKE) || points.contains(new Point(_x, _y))) {
             return true;
         }
         return false;
     }
-
 
     public Point getFirstPoint() {
         return points.get(0);
@@ -93,11 +93,11 @@ public class Snake {
         return applePoint;
     }
 
-    public int getLife(){
+    public int getLife() {
         return life;
     }
 
-    public int getLength(){
+    public int getLength() {
         return length;
     }
 

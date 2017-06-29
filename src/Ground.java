@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.TimerTask;
 
 /**
  * Created by Michał on 29.06.2017.
@@ -12,18 +13,56 @@ public class Ground extends JPanel implements KeyListener {
     private final int KEY_UP = 38;
     private final int KEY_RIGHT = 39;
     private final int KEY_DOWN = 40;
-    private int WIDTH = 900;
-    private int HEIGHT = 640;
-    private int PIXEL = 10;
-    private char previousKey = 'L';
+    private final int WIDTH = 1000;
+    private final int HEIGHT = 640;
+    private final int TIME_INTERVAL = 150;
+    private final int PIXEL = 20;
+    private final int STROKE = 10;
+    private java.util.Timer timer = new java.util.Timer();
+    private TimerTask task;
     private Snake snake;
+
+    private char previousKey = 'L';
+
+    private boolean left = true;
+    private boolean up = false;
+    private boolean right = false;
+    private boolean down = false;
 
     public Ground() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(new Color(109, 183, 104));
-        snake = new Snake(WIDTH, HEIGHT);
+        snake = new Snake(WIDTH, HEIGHT, STROKE, PIXEL);
         addKeyListener(this);
         setFocusable(true);
+
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                Point firstPoint = snake.getFirstPoint();
+                if (left) {
+                    if (snake.move(firstPoint.x - PIXEL, firstPoint.y)) {
+                        setLife();
+                    }
+                } else if (up) {
+                    if (snake.move(firstPoint.x, firstPoint.y - PIXEL)) {
+                        setLife();
+                    }
+                } else if (right) {
+                    if (snake.move(firstPoint.x + PIXEL, firstPoint.y)) {
+                        setLife();
+                    }
+                } else if (down) {
+                    if (snake.move(firstPoint.x, firstPoint.y + PIXEL)) {
+                        setLife();
+                    }
+                }
+
+                repaint();
+            }
+        };
+
+        timer.scheduleAtFixedRate(task, TIME_INTERVAL, TIME_INTERVAL);
     }
 
     @Override
@@ -51,16 +90,16 @@ public class Ground extends JPanel implements KeyListener {
     }
 
     public void drawBorder(Graphics2D g2d) {
-        g2d.setStroke(new BasicStroke(8));
+        g2d.setStroke(new BasicStroke(2 * STROKE));
 
         // vertical
-        g2d.drawLine(4, 4, 896, 4);
-        g2d.drawLine(4, 636, 896, 636);
+        g2d.drawLine(STROKE, STROKE, WIDTH - STROKE, STROKE);
+        g2d.drawLine(STROKE, HEIGHT - STROKE, WIDTH - STROKE, HEIGHT - STROKE);
 
 
         // horizontal
-        g2d.drawLine(4, 8, 4, 632);
-        g2d.drawLine(896, 8, 896, 632);
+        g2d.drawLine(STROKE, 2 * STROKE, STROKE, HEIGHT - 2 * STROKE);
+        g2d.drawLine(WIDTH - STROKE, 2 * STROKE, WIDTH - STROKE, HEIGHT - 2 * STROKE);
     }
 
     @Override
@@ -72,33 +111,32 @@ public class Ground extends JPanel implements KeyListener {
         int keyCode = e.getKeyCode();
         Point firstPoint = snake.getFirstPoint();
 
-        if (keyCode == KEY_LEFT && previousKey != 'R') {
-            previousKey = 'L';
-            if (snake.move(firstPoint.x - PIXEL, firstPoint.y)) {
-                setLife();
-            }
+        if (keyCode == KEY_LEFT && !right) {
+            left = true;
+            up = false;
+            right = false;
+            down = false;
 
-        } else if (keyCode == KEY_UP && previousKey != 'D') {
-            previousKey = 'U';
-            if (snake.move(firstPoint.x, firstPoint.y - PIXEL)) {
-                setLife();
-            }
+        } else if (keyCode == KEY_UP && !down) {
+            left = false;
+            up = true;
+            right = false;
+            down = false;
 
-        } else if (keyCode == KEY_RIGHT && previousKey != 'L') {
-            previousKey = 'R';
-            if (snake.move(firstPoint.x + PIXEL, firstPoint.y)) {
-                setLife();
-            }
+        } else if (keyCode == KEY_RIGHT && !left) {
+            left = false;
+            up = false;
+            right = true;
+            down = false;
 
-        } else if (keyCode == KEY_DOWN && previousKey != 'U') {
-            previousKey = 'D';
-            if (snake.move(firstPoint.x, firstPoint.y + PIXEL)) {
-                setLife();
-            }
+        } else if (keyCode == KEY_DOWN && !up) {
+            left = false;
+            up = false;
+            right = false;
+            down = true;
 
         }
         repaint();
-
     }
 
     @Override
@@ -111,6 +149,8 @@ public class Ground extends JPanel implements KeyListener {
         } else if (snake.getLife() == 1) {
             Navigate.life.setIcon(new ImageIcon("D:\\JAVA\\Snake\\src\\images\\1Life.png"));
         } else {
+            task.cancel();
+            timer.cancel();
             int option = JOptionPane.showConfirmDialog(null, "Game Over your score is " + String.valueOf(snake.getLength() - 6), "Game Over", JOptionPane.OK_OPTION);
             if (option == JOptionPane.OK_OPTION) System.exit(0);
         }

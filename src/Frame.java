@@ -15,7 +15,7 @@ public class Frame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        String name=JOptionPane.showInputDialog(null,"Enter your name ","Name",JOptionPane.QUESTION_MESSAGE);
+        String name= "Your name";//JOptionPane.showInputDialog(null,"Enter your name ","Name",JOptionPane.QUESTION_MESSAGE);
         if(name==null || name.equals("")) System.exit(0);
 
         setResizable(false);
