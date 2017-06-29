@@ -40,25 +40,26 @@ public class Snake {
     }
 
     public void move(int x, int y) {
-        if(!checkWallCollision(x,y)){
-            points.add(new Point(x,y));
-            points.remove(0);
+        if(!checkCollision(x,y)){
+            points.remove(length-1);
+            points.add(0,new Point(x,y));
         }
         else{
-            int option=JOptionPane.showConfirmDialog(null,"Game Over your score is " + length,"Game Over", JOptionPane.OK_OPTION);
-            if(option==JOptionPane.OK_OPTION) System.exit(0);
+//            int option=JOptionPane.showConfirmDialog(null,"Game Over your score is " + length,"Game Over", JOptionPane.OK_OPTION);
+//            if(option==JOptionPane.OK_OPTION) System.exit(0);
         }
     }
 
-    public boolean checkWallCollision(int x, int y){
-        if(x<=0 || y<=0 || this.x<=x || this.y<=y){
+    public boolean checkCollision(int _x, int _y){
+        if(_x<=0 || _y<=0 || _x>=x-14 || _y>=y-14 || points.contains(new Point(_x,_y))){
             return true;
         }
         return false;
     }
 
+
     public Point getLastPoint(){
-        return points.get(length -1);
+        return points.get(0);
     }
 
     public ArrayList<Point> getPoint(){

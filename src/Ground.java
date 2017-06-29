@@ -33,9 +33,17 @@ public class Ground extends JPanel implements KeyListener {
         drawBorder(g2d);
         g2d.setStroke(new BasicStroke(1));
 
+        boolean first = true;
 
-        for(Point p:snake.getPoint()){
-            g2d.drawRect(p.x,p.y,PIXEL,PIXEL);
+
+        for (Point p : snake.getPoint()) {
+            if (first) {
+                g2d.fillRect(p.x, p.y, PIXEL+1, PIXEL+1);
+                first = false;
+            } else {
+                g2d.drawRect(p.x, p.y, PIXEL, PIXEL);
+            }
+
         }
 
 
