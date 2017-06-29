@@ -38,14 +38,14 @@ public class Ground extends JPanel implements KeyListener {
 
         for (Point p : snake.getPoint()) {
             if (first) {
-                g2d.fillRect(p.x, p.y, PIXEL+1, PIXEL+1);
+                g2d.fillRect(p.x, p.y, PIXEL + 1, PIXEL + 1);
                 first = false;
             } else {
                 g2d.drawRect(p.x, p.y, PIXEL, PIXEL);
             }
         }
 
-        g2d.fillRect(snake.getApplePoint().x,snake.getApplePoint().y,PIXEL+1,PIXEL+1);
+        g2d.fillRect(snake.getApplePoint().x, snake.getApplePoint().y, PIXEL + 1, PIXEL + 1);
 
 
     }
@@ -74,23 +74,28 @@ public class Ground extends JPanel implements KeyListener {
 
         if (keyCode == KEY_LEFT && previousKey != 'R') {
             previousKey = 'L';
-            snake.move(firstPoint.x - PIXEL, firstPoint.y);
-            System.out.println("LEFT");
+            if (snake.move(firstPoint.x - PIXEL, firstPoint.y)) {
+                setLife();
+            }
+
         } else if (keyCode == KEY_UP && previousKey != 'D') {
             previousKey = 'U';
-            snake.move(firstPoint.x, firstPoint.y - PIXEL);
+            if (snake.move(firstPoint.x, firstPoint.y - PIXEL)) {
+                setLife();
+            }
 
-            System.out.println("UP");
         } else if (keyCode == KEY_RIGHT && previousKey != 'L') {
             previousKey = 'R';
-            snake.move(firstPoint.x + PIXEL, firstPoint.y);
+            if (snake.move(firstPoint.x + PIXEL, firstPoint.y)) {
+                setLife();
+            }
 
-            System.out.println("RIGHT");
         } else if (keyCode == KEY_DOWN && previousKey != 'U') {
             previousKey = 'D';
-            snake.move(firstPoint.x, firstPoint.y + PIXEL);
+            if (snake.move(firstPoint.x, firstPoint.y + PIXEL)) {
+                setLife();
+            }
 
-            System.out.println("DOWN");
         }
         repaint();
 
@@ -98,5 +103,16 @@ public class Ground extends JPanel implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+
+    public void setLife() {
+        if (snake.getLife() == 2) {
+            Navigate.life.setIcon(new ImageIcon("D:\\JAVA\\Snake\\src\\images\\2Life.png"));
+        } else if (snake.getLife() == 1) {
+            Navigate.life.setIcon(new ImageIcon("D:\\JAVA\\Snake\\src\\images\\1Life.png"));
+        } else {
+            int option = JOptionPane.showConfirmDialog(null, "Game Over your score is " + String.valueOf(snake.getLength() - 6), "Game Over", JOptionPane.OK_OPTION);
+            if (option == JOptionPane.OK_OPTION) System.exit(0);
+        }
     }
 }

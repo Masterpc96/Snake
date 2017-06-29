@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
  */
 public class Navigate extends JPanel{
     private JLabel name;
-    private JLabel score;
-    private JLabel life;
+    public static JLabel score;
+    public static JLabel life;
     private JButton close;
     private JLabel highScore;
     public Navigate(String user){

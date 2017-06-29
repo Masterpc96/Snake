@@ -13,6 +13,7 @@ public class Snake {
     private Point applePoint;
     private int x;
     private int y;
+    private int life;
 
     public Snake(int x, int y) {
         this.x = x;
@@ -32,6 +33,7 @@ public class Snake {
         points.add(new Point(x / 2 + 50, y / 2));
 
         length = 6;
+        life=3;
 
         apple();
     }
@@ -52,7 +54,7 @@ public class Snake {
         } while (points.contains(applePoint));
     }
 
-    public void move(int x, int y) {
+    public boolean move(int x, int y) {
         if (!checkCollision(x, y)) {
             points.remove(length - 1);
             points.add(0, new Point(x, y));
@@ -60,12 +62,15 @@ public class Snake {
                 apple();
                 points.add(applePoint);
                 length++;
+                Navigate.score.setText("Your score " + String.valueOf(length-6));
             }
-
         } else {
-            int option=JOptionPane.showConfirmDialog(null,"Game Over your score is " + length,"Game Over", JOptionPane.OK_OPTION);
-            if(option== JOptionPane.OK_OPTION) System.exit(0);
+//            int option=JOptionPane.showConfirmDialog(null,"Game Over your score is " + String.valueOf(length-6),"Game Over", JOptionPane.OK_OPTION);
+//            if(option== JOptionPane.OK_OPTION) System.exit(0);
+            life--;
+            return true;
         }
+        return false;
     }
 
     public boolean checkCollision(int _x, int _y) {
@@ -86,6 +91,14 @@ public class Snake {
 
     public Point getApplePoint() {
         return applePoint;
+    }
+
+    public int getLife(){
+        return life;
+    }
+
+    public int getLength(){
+        return length;
     }
 
 }
