@@ -23,16 +23,21 @@ public class Snake {
         points.add(new Point(x / 2, y / 2));
         points.add(new Point(x / 2 + 1, y / 2));
         points.add(new Point(x / 2 + 2, y / 2));
+        lenght = 3;
     }
 
     public void apple() {
-        do{
-            applePoint = new Point(rand.nextInt(x-4)+4,rand.nextInt(y-4)+4);
-        }while (points.contains(applePoint));
+        do {
+            applePoint = new Point(rand.nextInt(x - 4) + 4, rand.nextInt(y - 4) + 4);
+        } while (points.contains(applePoint));
     }
 
-    public void move(int x, int y){
+    public void move(int x, int y) {
 
+    }
+
+    public Point getLastPoint(){
+        return points.get(lenght-1);
     }
 
 }
