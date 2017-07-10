@@ -14,7 +14,7 @@ public class Navigate extends JPanel{
     private JLabel highScore;
     public Navigate(String user){
 
-        setPreferredSize(new Dimension(150,640));
+        setPreferredSize(new Dimension(150,600));
         setBackground(new Color(255, 255, 255));
 
         setLayout(new FlowLayout());
